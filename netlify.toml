@@ -1,0 +1,8 @@
+# Netlify configuration for Compose Quest (Next.js App Router)
+# The official Next.js runtime plugin handles SSR + the /api/mentor route.
+
+[build]
+  command = "npm run build"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

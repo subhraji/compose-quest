@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-cloud text-ink antialiased;
+  background-image:
+    radial-gradient(60rem 60rem at 110% -10%, rgba(139, 92, 246, 0.10), transparent 60%),
+    radial-gradient(50rem 50rem at -10% 10%, rgba(99, 102, 241, 0.10), transparent 55%);
+  background-attachment: fixed;
+}
+
+/* Thin friendly scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #a5b4fc; }
+
+@layer components {
+  .card {
+    @apply rounded-3xl bg-white/90 backdrop-blur shadow-soft border border-white/60;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl font-semibold transition-all
+           focus:outline-none focus-visible:ring-4 focus-visible:ring-quest-300 active:scale-[0.97];
+  }
+  .btn-primary {
+    @apply btn bg-quest-gradient text-white px-5 py-3 shadow-float hover:brightness-105;
+  }
+  .btn-ghost {
+    @apply btn bg-white text-ink px-5 py-3 border border-quest-100 hover:border-quest-300 hover:bg-quest-50;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold;
+  }
+  .prose-lesson p { @apply text-ink/80 leading-relaxed; }
+  .prose-lesson h2 { @apply text-2xl font-bold text-ink mt-8 mb-3; }
+  .prose-lesson code { @apply font-mono text-[0.85em] bg-quest-50 text-quest-700 px-1.5 py-0.5 rounded-md; }
+  .code-surface {
+    @apply font-mono text-sm rounded-2xl bg-ink text-cloud p-4 overflow-x-auto leading-relaxed;
+  }
+}
+
+/* token highlight colors for the playground/code blocks */
+.tok-kw { color: #c792ea; }
+.tok-fn { color: #82aaff; }
+.tok-str { color: #c3e88d; }
+.tok-num { color: #f78c6c; }
+.tok-com { color: #6b7194; font-style: italic; }
+.tok-anno { color: #ffcb6b; }
