@@ -68,20 +68,23 @@ export function AiMentor({ context, injected, onConsumed }: AiMentorProps) {
   return (
     <div className="card flex h-[560px] flex-col overflow-hidden">
       {/* header */}
-      <div className="flex items-center gap-3 border-b border-quest-50 bg-quest-gradient px-4 py-3 text-white">
-        <span className="grid h-9 w-9 place-items-center rounded-2xl bg-white/20">
-          <GraduationCap className="h-5 w-5" />
+      <div className="flex items-center gap-3 border-b border-black/[0.06] px-4 py-3 dark:border-white/[0.08]">
+        <span
+          className="grid h-9 w-9 place-items-center rounded-xl text-white shadow-lg shadow-violet-500/30"
+          style={{ backgroundImage: "var(--brand)" }}
+        >
+          <GraduationCap className="h-5 w-5" strokeWidth={1.5} />
         </span>
         <div>
-          <p className="font-display font-bold leading-tight">Quest · your AI tutor</p>
-          <p className="text-xs text-white/80">Knows you're on “{context.topicTitle}”</p>
+          <p className="font-display font-semibold leading-tight">Quest · your AI tutor</p>
+          <p className="text-xs text-ink/45 dark:text-cloud/45">Knows you're on “{context.topicTitle}”</p>
         </div>
       </div>
 
       {/* messages */}
       <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
         {messages.length === 0 && (
-          <div className="rounded-2xl bg-quest-50 p-4 text-sm text-ink/75">
+          <div className="rounded-xl bg-black/[0.03] p-4 text-sm text-ink/75 dark:bg-white/[0.04] dark:text-cloud/75">
             👋 Hi! I'm <b>Quest</b>. I already know you're learning <b>{context.topicTitle}</b>. Ask me
             anything — or tap a question below to start.
           </div>
@@ -97,9 +100,10 @@ export function AiMentor({ context, injected, onConsumed }: AiMentorProps) {
               <div
                 className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
                   m.role === "user"
-                    ? "bg-quest-gradient text-white"
-                    : "bg-cloud text-ink/85 border border-quest-50"
+                    ? "text-white shadow-md shadow-violet-500/20"
+                    : "bg-black/[0.03] text-ink/85 border border-black/[0.06] dark:bg-white/[0.04] dark:text-cloud/85 dark:border-white/[0.08]"
                 }`}
+                style={m.role === "user" ? { backgroundImage: "var(--brand)" } : undefined}
               >
                 {m.content}
               </div>
@@ -108,11 +112,11 @@ export function AiMentor({ context, injected, onConsumed }: AiMentorProps) {
         </AnimatePresence>
         {loading && (
           <div className="flex justify-start">
-            <div className="flex gap-1 rounded-2xl border border-quest-50 bg-cloud px-4 py-3">
+            <div className="flex gap-1 rounded-2xl border border-black/[0.06] bg-black/[0.03] px-4 py-3 dark:border-white/[0.08] dark:bg-white/[0.04]">
               {[0, 1, 2].map((d) => (
                 <motion.span
                   key={d}
-                  className="h-2 w-2 rounded-full bg-quest-400"
+                  className="h-2 w-2 rounded-full bg-ink/40 dark:bg-cloud/40"
                   animate={{ y: [0, -4, 0] }}
                   transition={{ repeat: Infinity, duration: 0.8, delay: d * 0.15 }}
                 />
@@ -123,15 +127,15 @@ export function AiMentor({ context, injected, onConsumed }: AiMentorProps) {
       </div>
 
       {/* quick prompts */}
-      <div className="flex flex-wrap gap-1.5 border-t border-quest-50 px-3 py-2">
+      <div className="flex flex-wrap gap-1.5 border-t border-black/[0.06] px-3 py-2 dark:border-white/[0.08]">
         {QUICK_PROMPTS.map((p) => (
           <button
             key={p}
             onClick={() => send(p)}
             disabled={loading}
-            className="chip border border-quest-100 bg-white text-quest-700 hover:bg-quest-50 disabled:opacity-50"
+            className="chip border border-black/[0.06] text-ink/60 transition-colors hover:bg-black/[0.04] disabled:opacity-50 dark:border-white/[0.08] dark:text-cloud/60 dark:hover:bg-white/[0.06]"
           >
-            <Sparkles className="h-3 w-3" /> {p}
+            <Sparkles className="h-3 w-3" strokeWidth={1.5} /> {p}
           </button>
         ))}
       </div>
@@ -142,13 +146,13 @@ export function AiMentor({ context, injected, onConsumed }: AiMentorProps) {
           e.preventDefault();
           send(input);
         }}
-        className="flex items-center gap-2 border-t border-quest-50 p-3"
+        className="flex items-center gap-2 border-t border-black/[0.06] p-3 dark:border-white/[0.08]"
       >
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask Quest anything about this lesson…"
-          className="flex-1 rounded-2xl border border-quest-100 bg-white px-4 py-2.5 text-sm outline-none focus:border-quest-300 focus:ring-4 focus:ring-quest-100"
+          className="flex-1 rounded-xl border border-black/10 bg-transparent px-4 py-2.5 text-sm outline-none transition-colors focus:border-ink/30 dark:border-white/15 dark:focus:border-white/30"
         />
         <button type="submit" disabled={loading} className="btn-primary h-11 w-11 p-0">
           <Send className="h-4 w-4" />

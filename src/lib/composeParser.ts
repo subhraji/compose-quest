@@ -97,8 +97,66 @@ function tokenize(src: string): Tok[] {
   return toks;
 }
 
+// composables the live preview knows how to draw
+const RENDERABLE = new Set([
+  "Text", "Button", "Column", "Row", "Box", "Spacer", "Icon", "Image", "Card", "Surface",
+]);
+
+// ── up-front syntax validation ─────────────────────────────
+// The tokenizer/parser are intentionally forgiving, so they would silently
+// swallow real mistakes. We catch the common ones here and return a friendly,
+// specific message the learner can act on.
+function findSyntaxError(src: string): string | null {
+  // strip line comments so // ... doesn't count toward brackets/quotes
+  const noComments = src.replace(/\/\/[^\n]*/g, "");
+
+  // unterminated string: remove every complete "..." then any leftover " is unbalanced
+  const noStrings = noComments.replace(/"(?:[^"\\]|\\.)*"/g, "");
+  if (noStrings.includes('"')) {
+    return 'A text string is missing its closing quote ( " ).';
+  }
+
+  // balanced & correctly-nested brackets
+  const closeToOpen: Record<string, string> = { ")": "(", "}": "{", "]": "[" };
+  const openToClose: Record<string, string> = { "(": ")", "{": "}", "[": "]" };
+  const stack: string[] = [];
+  for (const ch of noStrings) {
+    if (ch === "(" || ch === "{" || ch === "[") {
+      stack.push(ch);
+    } else if (ch === ")" || ch === "}" || ch === "]") {
+      const top = stack.pop();
+      if (!top) {
+        return `There's an extra closing ${ch} with no matching ${closeToOpen[ch]}.`;
+      }
+      if (top !== closeToOpen[ch]) {
+        return `Mismatched brackets — found ${ch} where a ${openToClose[top]} was expected.`;
+      }
+    }
+  }
+  if (stack.length > 0) {
+    const unclosed = stack[stack.length - 1];
+    return `A ${unclosed} is never closed — add a matching ${openToClose[unclosed]}.`;
+  }
+
+  return null;
+}
+
+// flatten the render tree so we can inspect every node
+function collectNodes(nodes: Node[], acc: Node[]): void {
+  for (const n of nodes) {
+    acc.push(n);
+    collectNodes(n.children, acc);
+  }
+}
+
 // ── parser ─────────────────────────────────────────────────
 export function parseCompose(src: string): ParseResult {
+  // 0) bail early on clear syntax errors with a specific message
+  const syntaxError = findSyntaxError(src);
+  if (syntaxError) {
+    return { state: {}, roots: [], error: syntaxError };
+  }
+
   const state: Record<string, number> = {};
 
   // 1) discover state vars:  var NAME by remember { mutableStateOf(N) }
@@ -309,7 +367,16 @@ export function parseCompose(src: string): ParseResult {
   try {
     roots = parseBlock();
     if (roots.length === 0) {
-      error = "I couldn't find any Composables to draw. Try adding something like Text(\"Hello\").";
+      error = 'I couldn\'t find any Composables to draw. Try adding something like Text("Hello").';
+    } else {
+      // nothing the preview can actually render? point at the culprit.
+      const all: Node[] = [];
+      collectNodes(roots, all);
+      const hasRenderable = all.some((n) => RENDERABLE.has(n.name));
+      if (!hasRenderable) {
+        const firstUnknown = all.find((n) => n.children.length === 0) ?? all[0];
+        error = `I don't know how to draw "${firstUnknown.name}". The live preview supports Text, Button, Column, Row, Box, Image, Icon, Card and Surface.`;
+      }
     }
   } catch (e) {
     error = "Hmm, I couldn't read that code. Check for matching { } and ( ).";

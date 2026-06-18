@@ -149,7 +149,7 @@ function RenderNode({
         <button
           onClick={handleClick}
           style={style}
-          className="rounded-2xl bg-quest-gradient px-5 py-2.5 font-semibold text-white shadow-soft transition active:scale-95"
+          className="rounded-xl bg-ink px-5 py-2.5 font-semibold text-white transition active:scale-95"
         >
           {kids.length ? kids : "Button"}
         </button>
@@ -220,15 +220,16 @@ export function ComposePreview({ code }: { code: string }) {
 
   if (parsed.error) {
     return (
-      <div className="flex h-full min-h-[160px] flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-coral-400/40 bg-coral-400/5 p-6 text-center">
+      <div className="flex h-full min-h-[160px] flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-coral-400/50 bg-coral-500/5 p-6 text-center">
         <AlertCircle className="h-6 w-6 text-coral-500" />
-        <p className="max-w-xs text-sm font-medium text-ink/70">{parsed.error}</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-coral-500">Couldn't run your code</p>
+        <p className="max-w-xs text-sm font-medium text-ink/70 dark:text-cloud/70">{parsed.error}</p>
       </div>
     );
   }
 
   return (
-    <div className="flex h-full min-h-[160px] items-center justify-center rounded-2xl bg-[radial-gradient(circle_at_30%_20%,#eef2ff,#f7f8fc)] p-6">
+    <div className="flex h-full min-h-[160px] items-center justify-center rounded-xl border border-black/[0.06] bg-white p-6 dark:border-white/[0.08]">
       <div className="flex flex-col items-center gap-1.5">
         {parsed.roots.map((n, i) => (
           <RenderNode key={i} node={n} state={state} setState={setState} initial={parsed.state} />

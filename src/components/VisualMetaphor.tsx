@@ -24,7 +24,7 @@ function MemoryBox() {
       <button onClick={() => setN((x) => x + 1)} className="btn-primary px-4 py-2 text-sm">
         Change the box → UI redraws
       </button>
-      <p className="text-xs text-ink-muted">The number updates the moment the box changes.</p>
+      <p className="text-xs text-ink/45 dark:text-cloud/45">The number updates the moment the box changes.</p>
     </div>
   );
 }
@@ -53,7 +53,7 @@ function Lego() {
           Reset
         </button>
       </div>
-      <p className="text-xs text-ink-muted">Only the new brick is added — the rest stay put.</p>
+      <p className="text-xs text-ink/45 dark:text-cloud/45">Only the new brick is added — the rest stay put.</p>
     </div>
   );
 }
@@ -82,13 +82,13 @@ function Rooms() {
           <button
             key={i}
             onClick={() => setRoom(i)}
-            className={`rounded-xl px-3 py-1.5 text-xs font-semibold ${i === room ? "bg-quest-gradient text-white" : "bg-quest-50 text-quest-700"}`}
+            className={`rounded-xl px-3 py-1.5 text-xs font-semibold transition ${i === room ? "bg-ink text-white dark:bg-white dark:text-ink" : "bg-black/[0.05] text-ink/60 dark:bg-white/10 dark:text-cloud/60"}`}
           >
             {rm.name}
           </button>
         ))}
       </div>
-      <p className="text-xs text-ink-muted">Navigation = walking between rooms (screens).</p>
+      <p className="text-xs text-ink/45 dark:text-cloud/45">Navigation = walking between rooms (screens).</p>
     </div>
   );
 }
@@ -103,13 +103,13 @@ function Stack() {
             initial={{ y: -10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: i * 0.15 }}
-            className="w-44 rounded-xl bg-white px-4 py-2.5 text-center text-sm font-semibold text-quest-700 shadow-soft"
+            className="w-44 rounded-xl border border-black/[0.06] bg-white px-4 py-2.5 text-center text-sm font-semibold text-ink/70 dark:border-white/10 dark:bg-white/[0.06] dark:text-cloud/80"
           >
             {t}
           </motion.div>
         ))}
       </div>
-      <p className="text-xs text-ink-muted">A Column stacks children top → bottom.</p>
+      <p className="text-xs text-ink/45 dark:text-cloud/45">A Column stacks children top → bottom.</p>
     </div>
   );
 }
@@ -119,7 +119,7 @@ function Generic({ emoji }: { emoji: string }) {
     <motion.div
       animate={{ y: [0, -8, 0] }}
       transition={{ repeat: Infinity, duration: 4 }}
-      className="grid h-28 w-28 place-items-center rounded-3xl bg-quest-gradient text-5xl shadow-float"
+      className="grid h-28 w-28 place-items-center rounded-3xl border border-black/[0.06] bg-white text-5xl dark:border-white/[0.1] dark:bg-white/[0.04]"
     >
       {emoji}
     </motion.div>
@@ -146,11 +146,11 @@ export function VisualMetaphor({ spec }: { spec: VisualSpec }) {
   return (
     <div className="card overflow-hidden p-6">
       <div className="mb-1 flex items-center gap-2">
-        <span className="chip bg-purple-500/10 text-purple-600">🎨 Visual idea</span>
-        <h3 className="font-display text-lg font-bold">{spec.title}</h3>
+        <span className="chip border border-black/[0.06] text-ink/55 dark:border-white/[0.08] dark:text-cloud/55">Visual idea</span>
+        <h3 className="font-display text-lg font-semibold">{spec.title}</h3>
       </div>
-      <p className="mb-5 text-sm text-ink/70">{spec.caption}</p>
-      <div className="rounded-2xl bg-sky-gradient p-6">{body}</div>
+      <p className="mb-5 text-sm text-ink/55 dark:text-cloud/55">{spec.caption}</p>
+      <div className="rounded-xl bg-black/[0.03] p-6 dark:bg-white/[0.04]">{body}</div>
     </div>
   );
 }
