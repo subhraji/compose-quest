@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowLeft, ArrowRight, BookOpen, Baby, Lightbulb, CheckCircle2,
-  AlertTriangle, Sparkles, Construction,
+  AlertTriangle, Code2, Construction,
 } from "lucide-react";
 import type { Lesson, Stage } from "@/data/types";
 import { CodeBlock } from "./CodeBlock";
@@ -61,26 +61,24 @@ export function LessonView({
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8">
+    <div className="mx-auto max-w-6xl px-4 py-10">
       {/* breadcrumb */}
-      <div className="mb-4 flex items-center gap-2 text-sm text-ink-muted">
-        <Link href="/roadmap" className="hover:text-quest-600">Roadmap</Link>
+      <div className="mb-5 flex items-center gap-2 text-sm text-ink/45 dark:text-cloud/45">
+        <Link href="/roadmap" className="transition-colors hover:text-ink dark:hover:text-cloud">Roadmap</Link>
         <span>/</span>
-        <span>{stage.emoji} {stage.title}</span>
+        <span>{stage.title}</span>
       </div>
 
       {/* header */}
-      <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-3">
-            <span className="text-4xl">{lesson.emoji}</span>
-            <h1 className="font-display text-3xl font-black sm:text-4xl">{lesson.title}</h1>
-          </div>
-          <div className="mt-2 flex flex-wrap items-center gap-2">
-            <span className="chip bg-quest-50 text-quest-700">🎯 {lesson.objective}</span>
-            <span className="chip bg-quest-50 text-quest-600">{lesson.estMinutes} min</span>
-            {isComplete && <span className="chip bg-mint-400/15 text-mint-600">completed ✓</span>}
-          </div>
+      <div className="mb-8">
+        <div className="flex items-center gap-3">
+          <span className="text-3xl">{lesson.emoji}</span>
+          <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">{lesson.title}</h1>
+        </div>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <span className="chip border border-black/[0.06] text-ink/55 dark:border-white/[0.08] dark:text-cloud/55">{lesson.objective}</span>
+          <span className="chip border border-black/[0.06] text-ink/45 dark:border-white/[0.08] dark:text-cloud/45">{lesson.estMinutes} min</span>
+          {isComplete && <span className="chip bg-mint-500/10 text-mint-600 dark:text-mint-400">Completed</span>}
         </div>
       </div>
 
@@ -89,13 +87,13 @@ export function LessonView({
         <div className="space-y-8">
           {!lesson.authored ? (
             <div className="card p-8 text-center">
-              <Construction className="mx-auto h-10 w-10 text-spark-500" />
-              <h2 className="mt-3 font-display text-xl font-bold">Full lesson coming soon</h2>
-              <p className="mx-auto mt-2 max-w-md text-ink/65">
+              <Construction className="mx-auto h-9 w-9 text-ink/40 dark:text-cloud/40" strokeWidth={1.5} />
+              <h2 className="mt-3 font-display text-xl font-semibold">Full lesson coming soon</h2>
+              <p className="mx-auto mt-2 max-w-md text-ink/55 dark:text-cloud/55">
                 Here's the quick idea while the full interactive lesson is being authored:
               </p>
-              <p className="mx-auto mt-4 max-w-md rounded-2xl bg-quest-50 p-4 text-ink/80">{lesson.child}</p>
-              <p className="mt-4 text-sm text-ink-muted">
+              <p className="note-accent mx-auto mt-4 max-w-md text-ink/80 dark:text-cloud/80">{lesson.child}</p>
+              <p className="mt-4 text-sm text-ink/45 dark:text-cloud/45">
                 Meanwhile, your AI tutor on the right already knows this topic — ask it anything! →
               </p>
             </div>
@@ -103,16 +101,18 @@ export function LessonView({
             <>
               {/* explanation tabs */}
               <div className="card overflow-hidden">
-                <div className="flex border-b border-quest-50">
+                <div className="flex border-b border-black/[0.06] dark:border-white/[0.08]">
                   {TABS.map((t) => (
                     <button
                       key={t.key}
                       onClick={() => setTab(t.key)}
-                      className={`flex flex-1 items-center justify-center gap-2 py-3 text-sm font-semibold transition ${
-                        tab === t.key ? "bg-quest-50 text-quest-700" : "text-ink/55 hover:bg-quest-50/50"
+                      className={`flex flex-1 items-center justify-center gap-2 py-3 text-sm font-medium transition ${
+                        tab === t.key
+                          ? "bg-black/[0.04] text-ink dark:bg-white/[0.06] dark:text-cloud"
+                          : "text-ink/45 hover:bg-black/[0.02] dark:text-cloud/45 dark:hover:bg-white/[0.03]"
                       }`}
                     >
-                      <t.icon className="h-4 w-4" /> {t.label}
+                      <t.icon className="h-4 w-4" strokeWidth={1.5} /> {t.label}
                     </button>
                   ))}
                 </div>
@@ -127,18 +127,18 @@ export function LessonView({
               {/* annotated example */}
               {lesson.example && (
                 <div className="card p-6">
-                  <h2 className="mb-3 flex items-center gap-2 font-display text-lg font-bold">
-                    <Sparkles className="h-5 w-5 text-quest-500" /> See it in code
+                  <h2 className="mb-3 flex items-center gap-2 font-display text-lg font-semibold">
+                    <Code2 className="h-5 w-5 text-quest-500" strokeWidth={1.75} /> See it in code
                   </h2>
                   <CodeBlock code={lesson.example.code} />
-                  <p className="mt-3 rounded-2xl bg-quest-50 p-4 text-sm text-ink/80">{lesson.example.explain}</p>
+                  <p className="note-accent mt-3 text-sm text-ink/80 dark:text-cloud/80">{lesson.example.explain}</p>
                 </div>
               )}
 
               {/* playground */}
               {lesson.playground && (
                 <div>
-                  <h2 className="mb-3 font-display text-lg font-bold">🛠️ Your turn — play with it</h2>
+                  <h2 className="mb-3 font-display text-lg font-semibold">Your turn — play with it</h2>
                   <Playground
                     starter={lesson.playground}
                     onAskAi={(code) => setInjected(`Here is my code, can you help me understand or fix it?\n\n${code}`)}
@@ -149,21 +149,21 @@ export function LessonView({
               {/* common mistakes */}
               {lesson.mistakes && lesson.mistakes.length > 0 && (
                 <div className="card p-6">
-                  <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-bold">
-                    <AlertTriangle className="h-5 w-5 text-coral-500" /> Watch out for these
+                  <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold">
+                    <AlertTriangle className="h-5 w-5 text-coral-500" strokeWidth={1.5} /> Watch out for these
                   </h2>
                   <div className="space-y-4">
                     {lesson.mistakes.map((mk, i) => (
                       <div key={i} className="grid gap-3 sm:grid-cols-2">
                         <div>
-                          <span className="chip bg-coral-400/10 text-coral-500">✗ Avoid</span>
+                          <span className="chip bg-coral-500/10 text-coral-500 dark:text-coral-400">✗ Avoid</span>
                           <CodeBlock code={mk.wrong} className="mt-1.5 text-xs" />
                         </div>
                         <div>
-                          <span className="chip bg-mint-400/15 text-mint-600">✓ Do this</span>
+                          <span className="chip bg-mint-500/10 text-mint-600 dark:text-mint-400">✓ Do this</span>
                           <CodeBlock code={mk.right} className="mt-1.5 text-xs" />
                         </div>
-                        <p className="sm:col-span-2 text-sm text-ink/70">💡 {mk.note}</p>
+                        <p className="sm:col-span-2 text-sm text-ink/65 dark:text-cloud/65">{mk.note}</p>
                       </div>
                     ))}
                   </div>
@@ -178,7 +178,7 @@ export function LessonView({
           )}
 
           {/* complete + nav */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-quest-100 pt-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-black/[0.06] pt-6 dark:border-white/[0.08]">
             {prevSlug ? (
               <Link href={`/lesson/${prevSlug}`} className="btn-ghost">
                 <ArrowLeft className="h-4 w-4" /> Previous
@@ -187,7 +187,7 @@ export function LessonView({
 
             <button
               onClick={() => complete(lesson.id)}
-              className={`btn ${isComplete ? "bg-mint-500 text-white px-5 py-3" : "btn-primary"}`}
+              className={`btn px-6 py-3 ${isComplete ? "bg-mint-500 text-white" : "btn-primary"}`}
             >
               <CheckCircle2 className="h-5 w-5" />
               {isComplete ? "Completed!" : "Mark complete (+20 XP)"}
